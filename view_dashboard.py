@@ -92,6 +92,15 @@ if start_date:
 st.subheader("📜 Recent Insider Transactions")
 st.dataframe(filtered_transactions, use_container_width=True)
 
+# 📥 Download filtered transactions
+csv = filtered_transactions.to_csv(index=False).encode('utf-8')
+st.download_button(
+    label="📥 Download CSV",
+    data=csv,
+    file_name='insider_transactions.csv',
+    mime='text/csv'
+)
+
 st.markdown("---")
 
 # 📊 Chart: Total Shares Bought per Company
@@ -120,4 +129,11 @@ for idx, row in filtered_summaries.iterrows():
         st.error(f"**{company_name}:** {summary_text}")
 
 st.markdown("---")
-st.markdown("<p style='text-align: center;'>© 2025 Insider Trading Dashboard</p>", unsafe_allow_html=True)
+
+# Footer
+st.markdown(
+    "<div style='text-align: center; font-size: 0.9em;'>"
+    "© 2025 Insider Trading Dashboard | Version 1.0"
+    "</div>",
+    unsafe_allow_html=True
+)
