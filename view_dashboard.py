@@ -50,7 +50,10 @@ def fetch_summaries():
     return df
 
 # Streamlit App
-st.title("📈 Insider Trading Dashboard")
+st.set_page_config(page_title="Insider Trading Dashboard", layout="wide")
+
+st.markdown("<h1 style='text-align: center; color: crimson;'>📈 Insider Trading Dashboard</h1>", unsafe_allow_html=True)
+st.markdown("---")
 
 # Fetch data
 transactions = fetch_data()
@@ -86,16 +89,20 @@ if start_date:
     filtered_transactions = filtered_transactions[pd.to_datetime(filtered_transactions['transaction_date']) >= start_date]
 
 # Display Transactions
-st.header("Recent Insider Transactions")
-st.dataframe(filtered_transactions)
+st.subheader("📜 Recent Insider Transactions")
+st.dataframe(filtered_transactions, use_container_width=True)
+
+st.markdown("---")
 
 # 📊 Chart: Total Shares Bought per Company
 st.subheader("📊 Total Insider Shares Bought by Company")
 shares_chart = filtered_transactions.groupby('company_name')['shares'].sum().sort_values(ascending=False)
 st.bar_chart(shares_chart)
 
+st.markdown("---")
+
 # 🧠 Display AI Summaries
-st.header("🧠 AI Generated Company Summaries")
+st.subheader("🧠 AI Generated Company Summaries")
 
 # Filter Summaries
 filtered_summaries = summaries.copy()
@@ -106,8 +113,11 @@ for idx, row in filtered_summaries.iterrows():
     company_name = row['company_name']
     summary_text = row['summary_text']
     
-    # Simple sentiment coloring: if "positive" or "buy" in text, mark green; else red
+    # Simple sentiment coloring
     if "buy" in summary_text.lower() or "positive" in summary_text.lower():
         st.success(f"**{company_name}:** {summary_text}")
     else:
         st.error(f"**{company_name}:** {summary_text}")
+
+st.markdown("---")
+st.markdown("<p style='text-align: center;'>© 2025 Insider Trading Dashboard</p>", unsafe_allow_html=True)
